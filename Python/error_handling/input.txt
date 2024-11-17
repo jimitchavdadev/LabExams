@@ -1,0 +1,3 @@
+Hello World! This is a sample text file.
+It contains several words and characters.
+Let's count the words and their frequencies.

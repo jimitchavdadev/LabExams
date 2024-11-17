@@ -1,0 +1,32 @@
+{
+    "Country A": {
+        "confirmed_cases": 100000,
+        "deaths": 2000,
+        "recovered": 80000,
+        "active_cases": 18000
+    },
+    "Country B": {
+        "confirmed_cases": 50000,
+        "deaths": 1000,
+        "recovered": 30000,
+        "active_cases": 19000
+    },
+    "Country D": {
+        "confirmed_cases": 150000,
+        "deaths": 3000,
+        "recovered": 120000,
+        "active_cases": 27000
+    },
+    "Country C": {
+        "confirmed_cases": 200000,
+        "deaths": 5000,
+        "recovered": 150000,
+        "active_cases": 45000
+    },
+    "Country E": {
+        "confirmed_cases": 25000,
+        "deaths": 500,
+        "recovered": 15000,
+        "active_cases": 9500
+    }
+}

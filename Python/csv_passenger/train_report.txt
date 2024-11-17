@@ -1,0 +1,12 @@
+Report 1: Train Details
+Train ID | Train Name | Source | Destination | Total Seats | Available Seats
+101 | Shatabdi Express | Delhi | Mumbai | 300 | 138
+102 | Rajdhani Express | Delhi | Kolkata | 250 | 96
+103 | Duronto Express | Mumbai | Chennai | 200 | 49
+104 | Garib Rath | Delhi | Jaipur | 400 | 295
+
+Report 2: Revenue Earned from Each Train
+Shatabdi Express (101): Total Revenue = 194400
+Rajdhani Express (102): Total Revenue = 231000
+Duronto Express (103): Total Revenue = 271800
+Garib Rath (104): Total Revenue = 84000

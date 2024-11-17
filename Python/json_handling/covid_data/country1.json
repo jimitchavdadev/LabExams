@@ -1,0 +1,12 @@
+{
+    "country": "Country A",
+    "confirmed_cases": {
+        "total": 100000
+    },
+    "deaths": {
+        "total": 2000
+    },
+    "recovered": {
+        "total": 80000
+    }
+}

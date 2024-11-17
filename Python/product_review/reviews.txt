@@ -1,0 +1,10 @@
+abcdefghij customer1 2023-11-17 5 Great product! Highly recommend!
+abcdefghij customer2 2023-11-16 4 Good value for the price.
+abcdefghij customer3 2023-11-15 3 Average quality, nothing special.
+abcdefghij customer4 2023-11-14 2 Not what I expected.
+abcdefghij customer5 2023-11-13 1 Very disappointed with this product.
+klmnopqrst customer1 2023-11-17 5 Excellent! Will buy again.
+klmnopqrst customer2 2023-11-16 4 Satisfied with my purchase.
+klmnopqrst customer3 2023-11-15 3 It's okay, could be better.
+klmnopqrst customer4 2023-11-14 5 Love it! Highly recommend!
+klmnopqrst customer5 2023-11-13 2 Not worth the money.

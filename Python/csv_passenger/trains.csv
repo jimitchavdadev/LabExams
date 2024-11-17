@@ -1,0 +1,5 @@
+Train ID,Train Name,Source Station,Destination Station,Total Seats,Available Seats,Total fare
+101,Shatabdi Express,Delhi,Mumbai,300,150,1200
+102,Rajdhani Express,Delhi,Kolkata,250,100,1500
+103,Duronto Express,Mumbai,Chennai,200,50,1800
+104,Garib Rath,Delhi,Jaipur,400,300,800

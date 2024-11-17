@@ -1,0 +1,11 @@
+Name,Date,Description,Amount,Category
+Alice,2023-01-01,Grocery shopping,150.00,groceries
+Bob,2023-01-02,Electricity bill,75.00,utilities
+Alice,2023-01-03,Movie night,30.00,entertainment
+Bob,2023-01-04,Gasoline,50.00,transportation
+Alice,2023-01-05,Restaurant dinner,80.00,entertainment
+Bob,2023-01-06,Internet bill,60.00,utilities
+Alice,2023-01-07,Monthly subscription,15.00,entertainment
+Bob,2023-01-08,Groceries,100.00,groceries
+Alice,2023-01-09,New shoes,120.00,clothing
+Bob,2023-01-10,Home repair,200.00,household

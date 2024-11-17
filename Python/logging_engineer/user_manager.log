@@ -1,0 +1,8 @@
+2024-11-17 18:29:12,076 - INFO - Trying to register: gemchavda
+2024-11-17 18:29:12,076 - INFO - User  'gemchavda' registered successfully
+2024-11-17 18:29:18,156 - INFO - Attempting to login user: gemchavda
+2024-11-17 18:29:18,156 - WARNING - Invalid password for user: gemchavda
+2024-11-17 18:29:24,065 - INFO - Attempting to login user: gemchavda
+2024-11-17 18:29:24,065 - INFO - User  login: gemchavda successful
+2024-11-17 18:29:28,791 - INFO - Retrieving user data: gemchavda
+2024-11-17 18:29:28,791 - INFO - Data retrieved for user 'gemchavda': {'username': 'gemchavda', 'password': 'allworknoplay'}
