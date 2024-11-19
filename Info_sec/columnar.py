@@ -1,69 +1,31 @@
-def columnar_encrypt(plaintext, key):
-    # Remove spaces from the plaintext and convert to uppercase
-    plaintext = plaintext.replace(" ", "").upper()
-    
-    # Calculate the number of columns
-    key_length = len(key)
-    num_rows = len(plaintext) // key_length + (1 if len(plaintext) % key_length else 0)
+def columnar_cipher(text, key, mode='encrypt'):
+    key_order = sorted((char, idx) for idx, char in enumerate(key))
+    key_indices = [idx for _, idx in key_order]
+    text = text.replace(" ", "").upper()
 
-    # Create a grid to hold the plaintext characters
-    grid = [''] * num_rows
+    if mode == 'encrypt':
+        rows = [text[i:i+len(key)] for i in range(0, len(text), len(key))]
+        if len(rows[-1]) < len(key):
+            rows[-1] += "X" * (len(key) - len(rows[-1]))
+        columns = ["".join(row[idx] for row in rows) for idx in key_indices]
+        return "".join(columns)
 
-    # Fill the grid with plaintext characters
-    for i in range(len(plaintext)):
-        row = i // key_length
-        col = i % key_length
-        grid[row] += plaintext[i]
-
-    # Create a list of tuples (column_index, column_data) based on the key
-    columns = sorted((key[i], i) for i in range(key_length))
-    
-    # Read the columns in the order defined by the sorted key
-    ciphertext = ''
-    for _, col_index in columns:
-        for row in grid:
-            if col_index < len(row):
-                ciphertext += row[col_index]
-
-    return ciphertext
-
-def columnar_decrypt(ciphertext, key):
-    # Calculate the number of columns and rows
-    key_length = len(key)
-    num_rows = len(ciphertext) // key_length + (1 if len(ciphertext) % key_length else 0)
-
-    # Create a grid to hold the ciphertext characters
-    grid = [''] * num_rows
-
-    # Create a list of tuples (column_index, column_data) based on the key
-    columns = sorted((key[i], i) for i in range(key_length))
-
-    # Calculate the number of characters in each column
-    column_lengths = [num_rows] * key_length
-    for i in range(len(ciphertext) % key_length):
-        column_lengths[i] -= 1
-
-    # Fill the grid with the ciphertext characters based on the sorted key
-    index = 0
-    for _, col_index in columns:
-        for row in range(column_lengths[col_index]):
-            grid[row] += ciphertext[index]
-            index += 1
-
-    # Read the plaintext from the grid row by row
-    plaintext = ''
-    for row in grid:
-        plaintext += row
-
-    return plaintext
+    elif mode == 'decrypt':
+        num_rows = len(text) // len(key)
+        extra = len(text) % len(key)
+        col_lengths = [num_rows + (1 if i < extra else 0) for i in range(len(key))]
+        columns = []
+        start = 0
+        for length in col_lengths:
+            columns.append(text[start:start+length])
+            start += length
+        rows = ["".join(columns[key_indices.index(i)][row] if row < len(columns[key_indices.index(i)]) else "" for i in range(len(key))) for row in range(num_rows)]
+        return "".join(rows)
 
 # Example usage
-if __name__ == "__main__":
-    plaintext = "HELLO WORLD"
-    key = "KEY"
-
-    encrypted = columnar_encrypt(plaintext, key)
-    print(f"Encrypted: {encrypted}")
-
-    decrypted = columnar_decrypt(encrypted, key)
-    print(f"Decrypted: {decrypted}")
+text = "HELLO WORLD"
+key = "KEYWORD"
+encrypted = columnar_cipher(text, key, mode='encrypt')
+print("Encrypted Text:", encrypted)
+decrypted = columnar_cipher(encrypted, key, mode='decrypt')
+print("Decrypted Text:", decrypted)

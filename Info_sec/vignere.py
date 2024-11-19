@@ -1,44 +1,25 @@
-def vigenere_encrypt(plaintext, keyword):
-    encrypted_text = []
-    keyword_repeated = (keyword * (len(plaintext) // len(keyword) + 1))[:len(plaintext)]
+def vigenere_cipher(text, key, mode='encrypt'):
+    key = key.upper()
+    text = text.replace(" ", "").upper()
+    key_repeated = (key * ((len(text) // len(key)) + 1))[:len(text)]
+    result = []
 
-    for p, k in zip(plaintext, keyword_repeated):
-        if p.isalpha():  # Only encrypt alphabetic characters
-            # Calculate the shift
-            shift = ord(k.upper()) - ord('A')
-            # Encrypt the character
-            encrypted_char = chr((ord(p.upper()) - ord('A') + shift) % 26 + ord('A'))
-            encrypted_text.append(encrypted_char)
+    for i in range(len(text)):
+        if text[i].isalpha():
+            shift = ord(key_repeated[i]) - ord('A')
+            if mode == 'encrypt':
+                result.append(chr((ord(text[i]) - ord('A') + shift) % 26 + ord('A')))
+            elif mode == 'decrypt':
+                result.append(chr((ord(text[i]) - ord('A') - shift) % 26 + ord('A')))
         else:
-            encrypted_text.append(p)  # Non-alphabetic characters are unchanged
+            result.append(text[i])
 
-    return ''.join(encrypted_text)
-
-
-def vigenere_decrypt(ciphertext, keyword):
-    decrypted_text = []
-    keyword_repeated = (keyword * (len(ciphertext) // len(keyword) + 1))[:len(ciphertext)]
-
-    for c, k in zip(ciphertext, keyword_repeated):
-        if c.isalpha():  # Only decrypt alphabetic characters
-            # Calculate the shift
-            shift = ord(k.upper()) - ord('A')
-            # Decrypt the character
-            decrypted_char = chr((ord(c.upper()) - ord('A') - shift + 26) % 26 + ord('A'))
-            decrypted_text.append(decrypted_char)
-        else:
-            decrypted_text.append(c)  # Non-alphabetic characters are unchanged
-
-    return ''.join(decrypted_text)
-
+    return ''.join(result)
 
 # Example usage
-if __name__ == "__main__":
-    plaintext = "HELLO WORLD"
-    keyword = "KEY"
-
-    encrypted = vigenere_encrypt(plaintext, keyword)
-    print(f"Encrypted: {encrypted}")
-
-    decrypted = vigenere_decrypt(encrypted, keyword)
-    print(f"Decrypted: {decrypted}")
+text = "HELLO WORLD"
+key = "KEY"
+encrypted = vigenere_cipher(text, key, mode='encrypt')
+print("Encrypted Text:", encrypted)
+decrypted = vigenere_cipher(encrypted, key, mode='decrypt')
+print("Decrypted Text:", decrypted)

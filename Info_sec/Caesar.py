@@ -1,27 +1,29 @@
-def caesar_encrypt(plaintext, shift):
-    encrypted_text = ""
-    for char in plaintext:
-        if char.isalpha():  # Check if the character is a letter
-            shift_amount = shift % 26  # Handle shifts larger than 26
-            # Determine the ASCII offset based on case
-            ascii_offset = ord('A') if char.isupper() else ord('a')
-            # Shift the character and wrap around the alphabet
-            encrypted_char = chr((ord(char) - ascii_offset + shift_amount) % 26 + ascii_offset)
-            encrypted_text += encrypted_char
+def caesar_cipher(text, shift, mode='encrypt'):
+    result = ""
+    if mode == 'decrypt':
+        shift = -shift  # Reverse the shift for decryption
+    
+    for char in text:
+        if char.isalpha():  # Process only alphabetic characters
+            # Determine if the character is uppercase or lowercase
+            start = ord('A') if char.isupper() else ord('a')
+            # Shift the character and wrap around within the alphabet
+            shifted_char = chr((ord(char) - start + shift) % 26 + start)
+            result += shifted_char
         else:
-            encrypted_text += char  # Non-alphabetic characters are unchanged
-    return encrypted_text
+            # Keep non-alphabetic characters unchanged
+            result += char
 
-def caesar_decrypt(ciphertext, shift):
-    return caesar_encrypt(ciphertext, -shift)  # Decrypting is just encrypting with the negative shift
+    return result
 
 # Example usage
-if __name__ == "__main__":
-    plaintext = "Hello, World!"
-    shift = 3
+plain_text = "Hello, World!"
+shift_amount = 3
 
-    encrypted = caesar_encrypt(plaintext, shift)
-    print(f"Encrypted: {encrypted}")
+# Encrypt
+encrypted_text = caesar_cipher(plain_text, shift_amount, mode='encrypt')
+print("Encrypted Text:", encrypted_text)
 
-    decrypted = caesar_decrypt(encrypted, shift)
-    print(f"Decrypted: {decrypted}")
+# Decrypt
+decrypted_text = caesar_cipher(encrypted_text, shift_amount, mode='decrypt')
+print("Decrypted Text:", decrypted_text)

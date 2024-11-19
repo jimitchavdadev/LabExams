@@ -1,97 +1,62 @@
-def create_playfair_matrix(keyword):
-    # Prepare the keyword by removing duplicates and converting to uppercase
-    keyword = ''.join(sorted(set(keyword), key=keyword.index)).upper()
-    
-    # Create a 5x5 matrix and fill it with the keyword letters
-    matrix = []
-    alphabet = 'ABCDEFGHIKLMNOPQRSTUVWXYZ'  # 'J' is omitted
-    for char in keyword:
-        if char not in matrix and char in alphabet:
-            matrix.append(char)
-    
-    for char in alphabet:
-        if char not in matrix:
-            matrix.append(char)
-    
-    return [matrix[i:i+5] for i in range(0, 25, 5)]  # Create 5x5 matrix
+def generate_key_matrix(key):
+    alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"  # 'J' is typically excluded
+    key = "".join(dict.fromkeys(key.upper().replace("J", "I")))  # Remove duplicates, replace 'J' with 'I'
+    key += "".join([ch for ch in alphabet if ch not in key])  # Fill with remaining letters
+    return [key[i:i+5] for i in range(0, 25, 5)]
 
-def format_text(text):
-    text = text.upper().replace('J', 'I')  # Replace J with I
-    formatted_text = ''
-    
+
+def preprocess_text(text):
+    text = text.upper().replace("J", "I").replace(" ", "")
+    result = ""
     i = 0
     while i < len(text):
-        if i + 1 < len(text):
-            if text[i] == text[i + 1]:  # If the same letter occurs, insert 'X'
-                formatted_text += text[i] + 'X'
-                i += 1
-            else:
-                formatted_text += text[i] + text[i + 1]
-                i += 2
-        else:
-            formatted_text += text[i] + 'X'  # If odd length, append 'X'
-            i += 1
-            
-    return formatted_text
+        result += text[i]
+        if i + 1 < len(text) and text[i] == text[i + 1]:  # Add 'X' if letters repeat in a pair
+            result += "X"
+        elif i + 1 < len(text):
+            result += text[i + 1]
+        i += 2
+    if len(result) % 2 != 0:
+        result += "X"  # Add 'X' to make even length
+    return result
 
-def find_position(char, matrix):
-    for i in range(5):
-        for j in range(5):
-            if matrix[i][j] == char:
-                return i, j
+
+def find_position(matrix, letter):
+    for row, line in enumerate(matrix):
+        if letter in line:
+            return row, line.index(letter)
     return None
 
-def playfair_encrypt(plaintext, keyword):
-    matrix = create_playfair_matrix(keyword)
-    formatted_text = format_text(plaintext)
-    ciphertext = ''
-    
-    for i in range(0, len(formatted_text), 2):
-        a, b = formatted_text[i], formatted_text[i + 1]
-        row_a, col_a = find_position(a, matrix)
-        row_b, col_b = find_position(b, matrix)
-        
-        if row_a == row_b:  # Same row
-            ciphertext += matrix[row_a][(col_a + 1) % 5]
-            ciphertext += matrix[row_b][(col_b + 1) % 5]
-        elif col_a == col_b:  # Same column
-            ciphertext += matrix[(row_a + 1) % 5][col_a]
-            ciphertext += matrix[(row_b + 1) % 5][col_b]
-        else:  # Rectangle
-            ciphertext += matrix[row_a][col_b]
-            ciphertext += matrix[row_b][col_a]
-    
-    return ciphertext
 
-def playfair_decrypt(ciphertext, keyword):
-    matrix = create_playfair_matrix(keyword)
-    formatted_text = ciphertext
-    plaintext = ''
+def playfair_cipher(text, key, mode="encrypt"):
+    matrix = generate_key_matrix(key)
+    text = preprocess_text(text)
+    shift = 1 if mode == "encrypt" else -1
+    result = ""
     
-    for i in range(0, len(formatted_text), 2):
-        a, b = formatted_text[i], formatted_text[i + 1]
-        row_a, col_a = find_position(a, matrix)
-        row_b, col_b = find_position(b, matrix)
-        
+    for i in range(0, len(text), 2):
+        a, b = text[i], text[i + 1]
+        row_a, col_a = find_position(matrix, a)
+        row_b, col_b = find_position(matrix, b)
+
         if row_a == row_b:  # Same row
-            plaintext += matrix[row_a][(col_a - 1) % 5]
-            plaintext += matrix[row_b][(col_b - 1) % 5]
+            result += matrix[row_a][(col_a + shift) % 5]
+            result += matrix[row_b][(col_b + shift) % 5]
         elif col_a == col_b:  # Same column
-            plaintext += matrix[(row_a - 1) % 5][col_a]
-            plaintext += matrix[(row_b - 1) % 5][col_b]
-        else:  # Rectangle
-            plaintext += matrix[row_a][col_b]
-            plaintext += matrix[row_b][col_a]
-    
-    return plaintext
+            result += matrix[(row_a + shift) % 5][col_a]
+            result += matrix[(row_b + shift) % 5][col_b]
+        else:  # Rectangle swap
+            result += matrix[row_a][col_b]
+            result += matrix[row_b][col_a]
+
+    return result
+
 
 # Example usage
-if __name__ == "__main__":
-    keyword = "KEYWORD"
-    plaintext = "HELLO WORLD"
-    
-    encrypted = playfair_encrypt(plaintext, keyword)
-    print(f"Encrypted: {encrypted}")
-    
-    decrypted = playfair_decrypt(encrypted, keyword)
-    print(f"Decrypted: {decrypted}")
+key_phrase = "Playfair Example"
+plain_text = "Hide the gold in the tree stump"
+cipher_text = playfair_cipher(plain_text, key_phrase, mode="encrypt")
+print("Encrypted Text:", cipher_text)
+
+decrypted_text = playfair_cipher(cipher_text, key_phrase, mode="decrypt")
+print("Decrypted Text:", decrypted_text)

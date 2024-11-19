@@ -1,66 +1,54 @@
 import random
-from sympy import isprime, mod_inverse
 
-def generate_prime_candidate(length):
-    """Generate a random prime number of specified bit length."""
-    p = random.getrandbits(length)
-    p |= (1 << length - 1) | 1  # Ensure p is of specified length and odd
-    return p
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
 
-def generate_prime_number(length):
-    """Generate a prime number of specified bit length."""
-    p = 4
-    while not isprime(p):
-        p = generate_prime_candidate(length)
-    return p
+def mod_inverse(e, phi):
+    for d in range(1, phi):
+        if (e * d) % phi == 0:
+            return d
+    return None
 
-def generate_keypair(length):
-    """Generate a public/private key pair."""
-    p = generate_prime_number(length)
-    q = generate_prime_number(length)
+def is_prime(n):
+    if n <= 1:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+def generate_keypair(p, q):
+    if not (is_prime(p) and is_prime(q)):
+        raise ValueError("Both numbers must be prime.")
+    if p == q:
+        raise ValueError("p and q cannot be the same.")
     
     n = p * q
     phi = (p - 1) * (q - 1)
     
-    # Choose e
-    e = 65537  # Common choice for e
+    e = random.randrange(2, phi)
+    while gcd(e, phi) != 1:
+        e = random.randrange(2, phi)
     
-    # Compute d
     d = mod_inverse(e, phi)
-    
-    return ((e, n), (d, n))  # Public and private keys
+    return ((e, n), (d, n))
 
 def encrypt(public_key, plaintext):
-    """Encrypt the plaintext using the public key."""
     e, n = public_key
-    plaintext_int = int.from_bytes(plaintext.encode(), 'big')
-    ciphertext = pow(plaintext_int, e, n)
-    return ciphertext
+    return [(ord(char) ** e) % n for char in plaintext]
 
 def decrypt(private_key, ciphertext):
-    """Decrypt the ciphertext using the private key."""
     d, n = private_key
-    plaintext_int = pow(ciphertext, d, n)
-    # Convert back to bytes
-    plaintext_bytes = plaintext_int.to_bytes((plaintext_int.bit_length() + 7) // 8, 'big')
-    return plaintext_bytes.decode()
+    return ''.join([chr((char ** d) % n) for char in ciphertext])
 
 # Example usage
-if __name__ == "__main__":
-    # Generate a keypair
-    public_key, private_key = generate_keypair(8)  # Use 8 bits for simplicity; use larger for real applications
-
-    print(f"Public key: {public_key}")
-    print(f"Private key: {private_key}")
-
-    # Message to encrypt
-    message = "HELLO"
-    print(f"Original message: {message}")
-
-    # Encrypt the message
-    encrypted_message = encrypt(public_key, message)
-    print(f"Encrypted message: {encrypted_message}")
-
-    # Decrypt the message
-    decrypted_message = decrypt(private_key, encrypted_message)
-    print(f"Decrypted message: {decrypted_message}")
+p = 61
+q = 53
+public_key, private_key = generate_keypair(p, q)
+message = "HELLO"
+encrypted = encrypt(public_key, message)
+print("Encrypted:", encrypted)
+decrypted = decrypt(private_key, encrypted)
+print("Decrypted:", decrypted)
