@@ -13,7 +13,7 @@ def rail_fence_cipher(text, key, mode='encrypt'):
         return ''.join(''.join(rail) for rail in rails)
     elif mode == 'decrypt':
         indices = [0] * len(text)
-        row, direction, idx = 0, 1, 0
+        row, direction = 0, 1
         for i in range(len(text)):
             indices[i] = row
             if row == 0:
