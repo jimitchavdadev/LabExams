@@ -8,7 +8,7 @@ def caesar_cipher(text, shift, mode='encrypt'):
             # Determine if the character is uppercase or lowercase
             start = ord('A') if char.isupper() else ord('a')
             # Shift the character and wrap around within the alphabet
-            shifted_char = chr((ord(char) - start + shift) % 26 + start)
+            shifted_char = chr(((ord(char) - start + shift) % 26) + start)
             result += shifted_char
         else:
             # Keep non-alphabetic characters unchanged

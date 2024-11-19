@@ -15,7 +15,7 @@ def hill_cipher(text, key_matrix, mode='encrypt'):
     result = []
     for vector in text_vectors:
         encrypted_vector = np.dot(key_matrix, vector) % 26
-        result.extend([chr(num + ord('A')) for num in encrypted_vector])
+        result.extend([chr(num + ord('A'))] for num in encrypted_vector)
 
     return ''.join(result)
 
